@@ -2,35 +2,25 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-const PORT = process.env.PORT || 8080;
-
-const app = express();
-
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/mewsStories");
+mongoose.connect("mongodb://localhost/mews_db");
+// Sets up the Express App
+// =============================================================
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Serve static content for the app from the "public" directory in the application directory.
-app.use(express.static("public"));
-
-// parse application/x-www-form-urlencoded
+// Sets up the Express app to handle data parsing
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// parse application/json
 app.use(bodyParser.json());
 
-// Set Handlebars.
-const exphbs = require("express-handlebars");
+// Static directory to be served
+app.use(express.static("app/public"));
 
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
+// ROUTER
+require("./app/routing/apiRoutes.js")(app);
+require("./app/routing/htmlRoutes.js")(app);
 
-// Import routes and give the server access to them.
-const routes = require("./controllers/mewsController.js");
-
-app.use(routes);
-
-// Start our server so that it can begin listening to client requests.
-app.listen(PORT, function() {
-  // Log (server-side) when our server has started
-  console.log("Server listening on: http://localhost:" + PORT);
+// LISTENER
+app.listen(PORT, function () {
+  console.log("App listening on PORT: " + PORT);
 });

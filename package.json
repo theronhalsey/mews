@@ -1,17 +1,19 @@
 {
   "name": "mews",
   "version": "1.0.0",
-  "description": "cat news scraper",
+  "description": "News about cats!",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/theronhalsey/mews.git"
   },
   "keywords": [
-    "cat"
+    "cats",
+    "news"
   ],
   "author": "Theron Halsey",
   "license": "ISC",
@@ -20,11 +22,10 @@
   },
   "homepage": "https://github.com/theronhalsey/mews#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
-    "express-handlebars": "^3.0.0",
-    "mongoose": "^5.1.5",
-    "request": "^2.87.0"
+    "mongoose": "^5.1.5"
   }
 }

@@ -1,2 +1,0 @@
-# mews
-cat news aggrigator
