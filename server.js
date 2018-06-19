@@ -3,7 +3,9 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/mews_db");
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mews_db";
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
 // Sets up the Express App
 // =============================================================
 const app = express();

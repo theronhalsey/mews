@@ -18,9 +18,13 @@ module.exports = function (app) {
                 result.title = $(this)
                     .children("a")
                     .text();
+                result.summary = $(this)
+                    .children("p")
+                    .text();
                 result.link = $(this)
                     .children("a")
                     .attr("href");
+                    console.log(result)
                 results.push(result)
             });
             res.send(results);
@@ -49,6 +53,17 @@ module.exports = function (app) {
             });
     });
 
+    // Route for getting a note from the db by id
+    app.get("/notes/:id", function (req, res) {
+        db.Note.findOne({ _id: req.params.id })
+            .then(function (dbNote) {
+                res.json(dbNote);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+    });
+
     // Route for grabbing a specific Story by id, populate it with it's note
     app.get("/stories/:id", function (req, res) {
         db.Story.findOne({ _id: req.params.id })
@@ -64,7 +79,6 @@ module.exports = function (app) {
     // Route for saving/updating an Story's associated Note
     app.post("/stories/:id", function (req, res) {
         db.Note.create(req.body)
-        console.log(req.body)
             .then(function (dbNote) {
                 return db.Story.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
             })
@@ -78,13 +92,13 @@ module.exports = function (app) {
 
     // Route to delete an item from DB
     app.delete("/api/stories/:id", function (req, res) {
-        db.Story.deleteOne({_id: req.params.id})
-        .then(function (dbStory) {
-            res.json(dbStory);
-        })
-        .catch(function (err) {
-            res.json(err)
-        })
+        db.Story.deleteOne({ _id: req.params.id })
+            .then(function (dbStory) {
+                res.json(dbStory);
+            })
+            .catch(function (err) {
+                res.json(err)
+            })
     });
 
 };

@@ -10,7 +10,9 @@ $(document).ready(function () {
                 newTr.append(`<td id="title${key}">${currentValue.title}</td>`);
                 newTr.append(`<td><a id="link${key}" class="btn btn-primary" href=${currentValue.link} target="_blank"</a>Visit Page`)
                 newTr.append(`<td><button class="btn btn-secondary" value="${key}" id="save${key}">Save Article</button>`)
-                $("#stories").append(newTr)
+                let tr2 = $(`<tr>`)
+                tr2.append(`<td id="summary${key}">${currentValue.summary}</td>`);
+                $("#stories").append(newTr).append(tr2)
             })
 
         })
@@ -21,9 +23,12 @@ $(document).ready(function () {
         let story = {};    
             story.title = $(`#title${num}`).text();
             console.log(story.title);
+            story.summary = $(`#summary${num}`).text();
+            console.log(story.title);
             story.link =  $(`#link${num}`).attr("href");
             console.log(story.link);
         $.post("/api/stories", story)
+        .then($(`#save${num}`).remove())
     };
 
 });
