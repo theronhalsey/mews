@@ -64,6 +64,7 @@ module.exports = function (app) {
     // Route for saving/updating an Story's associated Note
     app.post("/stories/:id", function (req, res) {
         db.Note.create(req.body)
+        console.log(req.body)
             .then(function (dbNote) {
                 return db.Story.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
             })
