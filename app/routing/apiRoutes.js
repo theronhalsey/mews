@@ -5,7 +5,7 @@ const db = require("../models");
 
 module.exports = function (app) {
 
-    let results = [];
+    const results = [];
 
     // A GET route for scraping the lifewithcats website
     app.get("/scrape", function (req, res) {
@@ -14,7 +14,6 @@ module.exports = function (app) {
             // Then, we load that into cheerio and save it to $ for a shorthand selector
             const $ = cheerio.load(response.data);
             $("Article h2").each(function (i, element) {
-
                 let result = {};
                 result.title = $(this)
                     .children("a")
@@ -23,19 +22,21 @@ module.exports = function (app) {
                     .children("a")
                     .attr("href");
                 results.push(result)
-
-
-                // Create a new Story using the `result` object built from scraping
-
-
-               
             });
-
-            console.log(results)
-
             res.send(results);
         });
     });
+
+    // Route for adding stories to the database
+    app.post("/api/stories", function (req, res) {
+        db.Story.create(req.body)
+            .then(function (dbStory) {
+                console.log(dbStory);
+            })
+            .catch(function (err) {
+                return res.json(err);
+            });
+    })
 
     // Route for getting all stories from the db
     app.get("/stories", function (req, res) {
@@ -72,6 +73,17 @@ module.exports = function (app) {
             .catch(function (err) {
                 res.json(err);
             });
+    });
+
+    // Route to delete an item from DB
+    app.delete("/api/stories/:id", function (req, res) {
+        db.Story.deleteOne({_id: req.params.id})
+        .then(function (dbStory) {
+            res.json(dbStory);
+        })
+        .catch(function (err) {
+            res.json(err)
+        })
     });
 
 };
